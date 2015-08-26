@@ -5,14 +5,15 @@ It therefore works on GNU / Linux and théroriquement, it should also run under 
 
 This script needs to function:
 
-ffmpeg:
-mkvtoolnix
-orcgrip
 
-ffmpeg - a collection of free software for processing audio or video stream
+####ffmpeg
+- a collection of free software for processing audio or video stream
 
-mkvtoolnix (GUI to mkvmerge) - a set of tools to create, alter and inspect Matroska files
+####mkvtoolnix (GUI to mkvmerge)
+- a set of tools to create, alter and inspect Matroska files
 
-cuneiform - optical reconnaissance system multi-language characters
+####cuneiform
+- optical reconnaissance system multi-language characters
 
-ogmrip - Application to extract and encode DVDs
+####ogmrip
+- Application to extract and encode DVDs
