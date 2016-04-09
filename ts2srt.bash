@@ -32,13 +32,15 @@ function readDirectoryPath(){
   echo -n "chemin absolu du répertoire des vidéos où extraire les sous-titres : "
   read directory;
   courant_directory=$(pwd);
+  echo $courant_directory;
+  if [[ -z "$directory" ]]; then
+    directory=$courant_directory
+  fi
+  echo $directory;
   if [[ ! -e "$directory" ]]; then
     echo "incorrect";
     readDirectoryPath;    
   fi
-  cd $directory;
-  directory=$(pwd);
-  cd $courant_directory;
   echo $directory;
   #testIfAnyFileIsPresent=$(find . -maxdepth 1 -iname "*.$extension" | wc -l);
 }
