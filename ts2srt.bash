@@ -161,7 +161,7 @@ function ExtractSubtitleFromVideoInMKV(){
     createDirectoryIfNotExist "${directory}/${extract_work_files[i]}";
 
     for (( j=0 ; j < ${#array_number[@]} ; j++ )) ; do
-      echo -e "ffmpeg -threads 4 -i "${directory}/${videoFiles[i]}"-hide_banner -map "${array_number[j]}" -vn -an -scodec dvdsub "${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.sh"
+      echo -e "ffmpeg -threads 4 -i "${directory}/${videoFiles[i]}" -hide_banner -map "${array_number[j]}" -vn -an -scodec dvdsub "${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.sh"
       ffmpeg -threads 4 -i ${directory}/${videoFiles[i]} -hide_banner -map ${array_number[j]} -vn -an -scodec dvdsub ${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}.mkv;
       mkv_files[${#mkv_files[*]}]=$(echo ${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}.mkv);
       echo -e "#mkv_files :\n#"${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.sh"
