@@ -80,59 +80,59 @@ function choiseTypeOfVideo(){
   fi
   #/home/alban/Vidéos/fr3/annez.ts" | sed "s/\(.*\)\/\([Aa-Zz]*.$extension\)/\2/g"
   #Example : data0001.ts data0002.ts data0003.ts
-  echo -e "##choiseTypeOfVideo"> $directory"/CommandConversion.sh"
+  echo -e "##choiseTypeOfVideo"> $directory"/CommandConversion.log"
   cd $directory;
   videoFiles=($( ls *.$extension ));
   extract_work_files=($(echo ${videoFiles[@]} | sed "s/.$extension//g"));
-  echo -e '#videoFiles : '${videoFiles[@]}"\n#extract_work_files: "${extract_work_files[@]}>> $directory"/CommandConversion.sh"
+  echo -e '#videoFiles : '${videoFiles[@]}"\n#extract_work_files: "${extract_work_files[@]}>> $directory"/CommandConversion.log"
   cd $courant_directory;
 }  
 
 
 function cleanVideoInformations() {
-    echo -e "## cleanVideoInformations " >> $directory"/CommandConversion.sh"
+    echo -e "## cleanVideoInformations " >> $directory"/CommandConversion.log"
     cat $1 | grep Imput > $2;
-    echo -e "cat "$1" | grep Imput > "$2 >> $directory"/CommandConversion.sh"    
+    echo -e "cat "$1" | grep Imput > "$2 >> $directory"/CommandConversion.log"    
     cat $1 | grep Duration >> $2;
-    echo -e "cat "$1" | grep Duration >> "$2 >> $directory"/CommandConversion.sh" 
+    echo -e "cat "$1" | grep Duration >> "$2 >> $directory"/CommandConversion.log" 
     cat $1 | grep Stream >> $2;
-    echo -e "cat "$1" | grep Stream >> "$2 >> $directory"/CommandConversion.sh"
+    echo -e "cat "$1" | grep Stream >> "$2 >> $directory"/CommandConversion.log"
     rm $1
-    echo -e "rm "$1 >> $directory"/CommandConversion.sh"
+    echo -e "rm "$1 >> $directory"/CommandConversion.log"
 }
 
 
 function prepareCommandToObtainSubtitlesTrackNumber(){
   local a;
   #local j=0;
-  echo -e "## prepareCommandToObtainSubtitlesTrackNumer " >> $directory"/CommandConversion.sh"
+  echo -e "## prepareCommandToObtainSubtitlesTrackNumer " >> $directory"/CommandConversion.log"
   for (( i=0 ; i < ${#videoFiles[@]} ; i++ )) ; do
     #/home/alban/Vidéos/fr3/ENEMY/data0003.ts
     data_videos_files[i]=$(echo $directory"/"${videoFiles[i]});
-    echo -e "#"${data_videos_files[i]} >> $directory"/CommandConversion.sh"
+    echo -e "#"${data_videos_files[i]} >> $directory"/CommandConversion.log"
     #/tmp/data0001_subtitle_infos.txt
     tmp_video_info[i]=$(echo "/tmp/"${videoFiles[i]} | sed "s/.$extension/_subtitle_infos.txt/g");
-    echo -e "#"${tmp_video_info[i]} >> $directory"/CommandConversion.sh"
+    echo -e "#"${tmp_video_info[i]} >> $directory"/CommandConversion.log"
     #/tmp/data0003.ts.info
     video_info_file[i]=$(echo /tmp/${videoFiles[i]}.info);
-    echo -e "#"${video_info_file[i]} >> $directory"/CommandConversion.sh"
+    echo -e "#"${video_info_file[i]} >> $directory"/CommandConversion.log"
     #ffprobe /home/alban/Vidéos/fr3/ENEMY/data0003.ts 2>&1 | ffmpeg -i EnnemyMine.ts -vn -an 2>&1 | grep '[A-Z][a-z]\{4\}' | sed "s/\(^[ ]*\)\([[:alnum:]]\)/\2/g" >/tmp/data0001_subtitle_infos.txt 
     ffprobe ${data_videos_files[i]} -hide_banner 2>&1 | grep '[A-Z][a-z]\{4\}' | sed "s/\(^[ ]*\)\([[:alnum:]]\)/\2/g" >${tmp_video_info[i]};
-    echo -e "ffprobe "${data_videos_files[i]}" -hide_banner 2>&1 | grep '[A-Z][a-z]\{4\}' | sed \"s/\(^[ ]*\)\([[:alnum:]]\)/\2/g\" >\${tmp_video_info[i]}">> $directory"/CommandConversion.sh"
-    echo -e "#Avant Nettoyage : "${tmp_video_info[i]} >> $directory"/CommandConversion.sh"
+    echo -e "ffprobe "${data_videos_files[i]}" -hide_banner 2>&1 | grep '[A-Z][a-z]\{4\}' | sed \"s/\(^[ ]*\)\([[:alnum:]]\)/\2/g\" >\${tmp_video_info[i]}">> $directory"/CommandConversion.log"
+    echo -e "#Avant Nettoyage : "${tmp_video_info[i]} >> $directory"/CommandConversion.log"
     #create a cleanning file  of video information
-    echo -e "#cleanVideoInformations "${tmp_video_info[i]}" "${video_info_file[i]}  >> $directory"/CommandConversion.sh"
+    echo -e "#cleanVideoInformations "${tmp_video_info[i]}" "${video_info_file[i]}  >> $directory"/CommandConversion.log"
     cleanVideoInformations "${tmp_video_info[i]}" "${video_info_file[i]}";
-    echo -e "#Resultat Nettoyage : "${video_info_file[i]} >> $directory"/CommandConversion.sh"
+    echo -e "#Resultat Nettoyage : "${video_info_file[i]} >> $directory"/CommandConversion.log"
   done
 }
 
 
 function createDirectoryIfNotExist(){
-  echo -e "## createDirectoryIfNotExist" >> $directory"/CommandConversion.sh"
+  echo -e "## createDirectoryIfNotExist" >> $directory"/CommandConversion.log"
   if [[ ! -e $1 ]] ; then
     mkdir $1;
-    echo -e "mkdir "$1>> $directory"/CommandConversion.sh"
+    echo -e "mkdir "$1>> $directory"/CommandConversion.log"
   fi
   
 }
@@ -142,35 +142,35 @@ function ExtractSubtitleFromVideoInMKV(){
   local i=0;
   local j=0;
   local k=0;
-  echo -e "## ExtractSubtitleFromVideoInMKV " >> $directory"/CommandConversion.sh"
+  echo -e "## ExtractSubtitleFromVideoInMKV " >> $directory"/CommandConversion.log"
     #cat /tmp/video-info.txt | grep Subtitle | sed "s/\(^.* \#\)\([0-9]:[0-9]\)(\([[:alnum:]]\{3\}\))\(.*\)/\2#\3/g"
     # tracks_Info[1] =Stream #0:5(fra): Subtitle: dvd_subtitle (default) Stream #0:6(ger): Subtitle: dvd_subtitle Stream #0:7(fra): Subtitle: dvd_subtitle    
     #tracks_Info[i]=$(cat ${video_info_file[i]} | grep Subtitle | sed "s/\(^.* \#\)\([0-9]:[0-9]\)(\([[:alnum:]]\{3\}\))\(.*\)/\2#\3/g" );
-    #echo -e "#Track info : \n"${tracks_Info[i]} >> $directory"/CommandConversion.sh"
+    #echo -e "#Track info : \n"${tracks_Info[i]} >> $directory"/CommandConversion.log"
     #rm ${video_info_file[i]};
-    #echo -e "rm "${video_info_file[i]} >> $directory"/CommandConversion.sh"
+    #echo -e "rm "${video_info_file[i]} >> $directory"/CommandConversion.log"
   #echo  'tracks_Info: '${video_info_file[@]};
   echo  'tracks_Info: '${videoFiles[@]}" tracks_video Info: "${#video_info_file[@]}" extract_work_files: "${extract_work_files[@]};
-  echo -e 'tracks_Info: '${videoFiles[@]}" tracks_video Info: "${#video_info_file[@]}" extract_work_files: "${extract_work_files[@]}>> $directory"/CommandConversion.sh"
+  echo -e 'tracks_Info: '${videoFiles[@]}" tracks_video Info: "${#video_info_file[@]}" extract_work_files: "${extract_work_files[@]}>> $directory"/CommandConversion.log"
   for (( i=0 ; i < ${#video_info_file[@]} ; i++ )) ; do
     array_number=($(cat ${video_info_file[i]} | grep subtitle | cut -d"#" -f2 | cut -d'[' -f1))
     array_lang=($(cat ${video_info_file[i]} | grep subtitle | cut -d"#" -f2 | cut -d')' -f1 | cut -d'(' -f2))
-    echo "rm "${video_info_file[i]} >> $directory"/CommandConversion.sh"
+    echo "rm "${video_info_file[i]} >> $directory"/CommandConversion.log"
     rm ${video_info_file[i]};
-    echo -e "#createDirectoryIfNotExist "${directory}/${extract_work_files[i]} >> $directory"/CommandConversion.sh"
+    echo -e "#createDirectoryIfNotExist "${directory}/${extract_work_files[i]} >> $directory"/CommandConversion.log"
     createDirectoryIfNotExist "${directory}/${extract_work_files[i]}";
 
     for (( j=0 ; j < ${#array_number[@]} ; j++ )) ; do
-      echo -e "ffmpeg -threads 4 -i "${directory}/${videoFiles[i]}" -hide_banner -map "${array_number[j]}" -vn -an -scodec dvdsub "${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.sh"
-      ffmpeg -threads 4 -i ${directory}/${videoFiles[i]} -hide_banner -map ${array_number[j]} -vn -an -scodec dvdsub ${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}.mkv;
+      echo -e "ffmpeg -threads 4 -i "${directory}/${videoFiles[i]}" -hide_banner -map "${array_number[j]}" -vn -an -scodec dvdsub -ignore_unknown "${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.log"
+      ffmpeg -threads 4 -i ${directory}/${videoFiles[i]} -hide_banner -map ${array_number[j]} -vn -an -scodec dvdsub -ignore_unknown ${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}.mkv;
       mkv_files[${#mkv_files[*]}]=$(echo ${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}.mkv);
-      echo -e "#mkv_files :\n#"${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.sh"
+      echo -e "#mkv_files :\n#"${directory}/${extract_work_files[i]}/${extract_work_files[i]}_${array_lang[j]}_${array_number[j]}".mkv" >> $directory"/CommandConversion.log"
       mkv_directories[${#mkv_directories[*]}]=$(echo ${directory}/${extract_work_files[i]});
-      echo -e "#mkv_directories :\n#"${directory}/${extract_work_files[i]} >> $directory"/CommandConversion.sh"
+      echo -e "#mkv_directories :\n#"${directory}/${extract_work_files[i]} >> $directory"/CommandConversion.log"
       subtitle_sub_id[${#subtitle_sub_id[*]}]=$(echo ${extract_work_files[i]}_${array_lang[j]}_${array_number[j]});
-      echo -e "#subtitle_sub_id :\n#"${extract_work_files[i]}_${array_lang[j]}_${array_number[j]} >> $directory"/CommandConversion.sh"
+      echo -e "#subtitle_sub_id :\n#"${extract_work_files[i]}_${array_lang[j]}_${array_number[j]} >> $directory"/CommandConversion.log"
       subtitle_lang[${#subtitle_lang[*]}]=$(echo ${array_lang[j]});
-      echo -e "#subtitle__lang :\n#"${array_lang[j]} >> $directory"/CommandConversion.sh"
+      echo -e "#subtitle__lang :\n#"${array_lang[j]} >> $directory"/CommandConversion.log"
     done
   done
 }
@@ -178,9 +178,9 @@ function ExtractSubtitleFromVideoInMKV(){
 
 
 function OpticalRecognitionCharacterOfTiff(){
-  echo -e "## OpticalRecognitionCharacterOfTiff " >> $directory"/CommandConversion.sh"
+  echo -e "## OpticalRecognitionCharacterOfTiff " >> $directory"/CommandConversion.log"
   for eachTiff in $1*.tif; do
-    echo -e "cuneiform -l "$2" -f text -o "$eachTiff".txt "$eachTiff >> $directory"/CommandConversion.sh"
+    echo -e "cuneiform -l "$2" -f text -o "$eachTiff".txt "$eachTiff >> $directory"/CommandConversion.log"
     cuneiform -l $2 -f text -o $eachTiff.txt $eachTiff;     
   done 
 
@@ -189,23 +189,23 @@ function OpticalRecognitionCharacterOfTiff(){
 
 function convertMKVSubtitle(){
   local j=0
-  echo -e "## convertMKVSubtitleInSRT " >> $directory"/CommandConversion.sh"
+  echo -e "## convertMKVSubtitleInSRT " >> $directory"/CommandConversion.log"
   for (( i=0 ; i < ${#mkv_files[@]}; i++ )); do 
     #mkvextract tracks /home/alban/Vidéos/fr3/EnnemyMine/EnnemyMine_0_fra.mkv -c ISO8859-1 0:/home/alban/Vidéos/fr3/EnnemyMine/EnnemyMine_0_fra
     cd ${mkv_directories[i]}
-    echo -e "cd "${mkv_directories[i]} >> $directory"/CommandConversion.sh"
+    echo -e "cd "${mkv_directories[i]} >> $directory"/CommandConversion.log"
     mkvextract tracks ${mkv_files[i]} -c ISO8859-1 0:${subtitle_sub_id[i]};
-    echo -e "mkvextract tracks "${mkv_files[i]}" -c ISO8859-1 0:"${subtitle_sub_id[i]} >> $directory"/CommandConversion.sh"
+    echo -e "mkvextract tracks "${mkv_files[i]}" -c ISO8859-1 0:"${subtitle_sub_id[i]} >> $directory"/CommandConversion.log"
     # if sub file existe and has a size equal to 0 than erase sub and idx files
     if [ ! -s ${mkv_directories[i]}/${subtitle_sub_id[i]}.sub ]; then 
       rm ${mkv_directories[i]}/${subtitle_sub_id[i]}.sub;
       rm ${mkv_directories[i]}/${subtitle_sub_id[i]}.idx;
-      echo -e "rm "${mkv_directories[i]}/${subtitle_sub_id[i]}".sub;\nrm "${mkv_directories[i]}/${subtitle_sub_id[i]}".idx;"  >> $directory"/CommandConversion.sh";
+      echo -e "rm "${mkv_directories[i]}/${subtitle_sub_id[i]}".sub;\nrm "${mkv_directories[i]}/${subtitle_sub_id[i]}".idx;"  >> $directory"/CommandConversion.log";
     fi
     
    done
    cd ${directory}
-   echo -e "cd "${directory} >> $directory"/CommandConversion.sh"
+   echo -e "cd "${directory} >> $directory"/CommandConversion.log"
 }
 
 
@@ -214,19 +214,19 @@ function tif2SRT(){
   for (( i=0 ; i < ${#mkv_files[@]}; i++ )); do 
     if [ -s ${mkv_directories[i]}/${subtitle_sub_id[i]}.sub ]; then 
       cd ${mkv_directories[i]}
-      echo -e "subp2tiff --sid=0 -n "${subtitle_sub_id[i]}  >> $directory"/CommandConversion.sh";
+      echo -e "subp2tiff --sid=0 -n "${subtitle_sub_id[i]}  >> $directory"/CommandConversion.log";
       subp2tiff --sid=0 -n ${subtitle_sub_id[i]};
-      echo -e "OpticalRecognitionCharacterOfTiff "${subtitle_sub_id[i]}" "${subtitle_lang[i]}  >> $directory"/CommandConversion.sh";
+      echo -e "OpticalRecognitionCharacterOfTiff "${subtitle_sub_id[i]}" "${subtitle_lang[i]}  >> $directory"/CommandConversion.log";
       OpticalRecognitionCharacterOfTiff "${subtitle_sub_id[i]}" "${subtitle_lang[i]}";
-      echo -e "#commande subptools : \nsubptools -s -w -t srt -i ${subtitle_sub_id[i]}.xml -o ${directory}/${subtitle_sub_id[i]}.srt" >> $directory"/CommandConversion.sh";
+      echo -e "#commande subptools : \nsubptools -s -w -t srt -i ${subtitle_sub_id[i]}.xml -o ${directory}/${subtitle_sub_id[i]}.srt" >> $directory"/CommandConversion.log";
       subptools -s -w -t srt -i ${subtitle_sub_id[i]}.xml -o ${directory}/${subtitle_sub_id[i]}.srt
     fi  
     
   done
   cd ${directory}
-  echo -e "cd "${directory} >> $directory"/CommandConversion.sh"
+  echo -e "cd "${directory} >> $directory"/CommandConversion.log"
   for each in ${mkv_directories[@]}; do
-    echo -e "rm -rf "$each >> $directory"/CommandConversion.sh";
+    echo -e "rm -rf "$each >> $directory"/CommandConversion.log";
     rm -rf $each;
     
   done
