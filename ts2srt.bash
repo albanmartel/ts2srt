@@ -17,7 +17,7 @@
 #
 # Date : 26/08/2015
 # version : 0.1
-# Mise-à-jour : 
+# Mise-à-jour : 12/03/2018
 # ----------------------------------------------------
 
 # !/bin/bash
@@ -45,12 +45,10 @@ function readDirectoryPath(){
   #testIfAnyFileIsPresent=$(find . -maxdepth 1 -iname "*.$extension" | wc -l);
 }
 
-
 function presentationOfFileDirectory(){
-  message=$("<<"$directory">> contient les fichiers suivants :  ");
   files=$(ls $directory/*.*);
-  print "%$\n" "${green}$message${NC}";
-  print "%$\n" "${green}$files${NC}";
+  printf "%s : \n\n" "${green}$directory${NC}";
+  printf "%s\n" "${green}$files${NC}";
 }
 
 
@@ -74,8 +72,8 @@ function choiseTypeOfVideo(){
   done
 
   if [ $count = 3 ] ; then
-    print "%$\n" "${red}""3 mauvaises tentatives entrainent l\'arrêt du programme""${NC}";
-    print "%$\n" "${red}""Abandon""${NC}";
+    printf "%$\n" "${red}""3 mauvaises tentatives entrainent l\'arrêt du programme""${NC}";
+    printf "%$\n" "${red}""Abandon""${NC}";
     exit 100;
   fi
   #/home/alban/Vidéos/fr3/annez.ts" | sed "s/\(.*\)\/\([Aa-Zz]*.$extension\)/\2/g"
